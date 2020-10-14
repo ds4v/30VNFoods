@@ -1,7 +1,10 @@
 function onOpen() {
 	const ui = SpreadsheetApp.getUi();
-	const menu = ui.createMenu('TOOL GÁN NHÃN');
-	menu.addItem('Mở Form', 'loadLabelingForm');
+	const menu = ui.createMenu('TOOLS BỔ TRỢ');
+
+	menu.addItem('Mở form gán nhãn', 'loadLabelingForm');
+	menu.addItem('Sắp xếp sheets theo tên', 'sortSheets');
+	menu.addItem('Xóa url trùng ở sheet hiện tại', 'removeDuplicates');
 	menu.addToUi();
 }
 
@@ -12,6 +15,46 @@ function loadLabelingForm() {
 	ui.showSidebar(html);
 }
 
+function sortSheets() {
+	const spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
+	const sheets = spreadSheet.getSheets();
+	const sheetNameArray = [];
+
+	for (let i = 0; i < sheets.length; i++)
+		sheetNameArray.push(sheets[i].getName());
+	sheetNameArray.sort();
+
+	for (let j = 0; j < sheets.length; j++) {
+		spreadSheet.setActiveSheet(
+			spreadSheet.getSheetByName(sheetNameArray[j])
+		);
+		spreadSheet.moveActiveSheet(j + 1);
+	}
+}
+
+function removeDuplicates() {
+	const activeSheet = SpreadsheetApp.getActiveSheet();
+	const currentData = activeSheet.getDataRange().getValues();
+	const newData = [];
+
+	for (let i in currentData) {
+		let row = currentData[i].slice(1, 3);
+		let duplicate = false;
+
+		for (let j in newData)
+			if (row.join() == newData[j].join()) duplicate = true;
+		if (!duplicate) newData.push(row);
+	}
+
+	activeSheet
+		.getRange(1, 2, currentData.length, newData[0].length)
+		.clearContent();
+
+	activeSheet
+		.getRange(1, 2, newData.length, newData[0].length)
+		.setValues(newData);
+}
+
 function getSheetNames() {
 	const spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
 	const sheetNames = spreadSheet.getSheets().map(sheet => sheet.getName());
@@ -19,8 +62,7 @@ function getSheetNames() {
 }
 
 function getActiveAddress() {
-	const spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
-	const activeSheet = spreadSheet.getActiveSheet();
+	const activeSheet = SpreadsheetApp.getActiveSheet();
 	const activeCell = activeSheet.getActiveCell();
 	return [activeSheet, activeCell.getRow(), activeCell.getColumn()];
 }
@@ -65,19 +107,4 @@ function moveImage(dest) {
 function deleteImage() {
 	const [activeSheet, activeRow, activeCol] = getActiveAddress();
 	activeSheet.deleteRow(activeRow);
-}
-
-function sortSheets() {
-	const spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
-	const sheets = spreadSheet.getSheets();
-	const sheetNameArray = [];
-
-	for (var i = 0; i < sheets.length; i++)
-		sheetNameArray.push(sheets[i].getName());
-	sheetNameArray.sort();
-
-	for (var j = 0; j < sheets.length; j++) {
-		spreadSheet.setActiveSheet(spreadSheet.getSheetByName(sheetNameArray[j]));
-		spreadSheet.moveActiveSheet(j + 1);
-	}
 }
