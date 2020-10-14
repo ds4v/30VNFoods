@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <base target="_top">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" />
+    </head>
+
+    <body>
+        <section class="section">
+            <div class="container">
+                <div class="field">
+                    <figure class="image">
+                        <a id="image-content" href="https://github.com/18520339" target="_blank">
+                            <img src="https://portal.uit.edu.vn/Styles/profi/images/logo186x150.png" />
+                        </a>
+                    </figure>
+                </div>
+
+                <div class="field is-grouped">
+                    <label class="control label">Tên hình:</label>
+                    <p id="image-name"></p>
+                </div>
+
+                <div class="field is-grouped">
+                    <label class="control label">Crawl từ:</label>
+                    <p id="image-source"></p>
+                </div>
+                
+                <div class="field">
+                    <label class="label">Nhãn hiện tại:</label>
+                    <div class="select is-fullwidth">
+                        <select id="image-labels">
+                            <? const sheetNames = getSheetNames();
+                               for (let i = 0; i < sheetNames.length; i++) { ?>
+                                   <option><?= sheetNames[i] ?></option>
+                            <? } ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field is-grouped is-grouped-centered">
+                    <button id="move-image" class="control button is-link">Di chuyển</button>
+                    <button id="delete-image" class="button is-link is-light">Xóa hình</button>
+                </div>
+            </div>
+        </section>  
+        <script>
+            const imageUrl = document.getElementById('image-content')
+            const imageContent = imageUrl.getElementsByTagName('img')[0]
+
+            const imageName = document.getElementById('image-name')
+            const imageSource = document.getElementById('image-source')
+            const imageLabels = document.getElementById('image-labels')
+            
+            const btnMove = document.getElementById('move-image')
+            const btnDelete = document.getElementById('delete-image')
+            
+            btnMove.addEventListener('click', () => google.script.run.moveImage(imageLabels.value))
+            btnDelete.addEventListener('click', () => google.script.run.deleteImage())
+
+            window.setInterval(() => google.script.run.withSuccessHandler(value => {
+                const [name, label, url, source] = value
+                if (imageUrl.href !== url) imageUrl.href = imageContent.src = url 
+                else return;
+                
+                if (imageName.innerText !== name) imageName.innerText = name                
+                if (imageSource.innerText !== source) imageSource.innerText = source
+                if (imageLabels.value !== label) imageLabels.value = label 
+            }).getCurrentInfo(), 500);
+        </script>
+    </body>
+</html>

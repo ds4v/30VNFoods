@@ -1,0 +1,7 @@
+#!/bin/bash
+
+input_file="../labels.txt"
+while read label; do
+    python sort_similar.py -s "Image Details" -w "${label/$'\r'/}" -a "credentials.json"
+    echo
+done <"$input_file"

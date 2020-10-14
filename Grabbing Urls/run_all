@@ -1,0 +1,10 @@
+#!/bin/bash
+
+input_file="../labels.txt"
+mkdir -p Datasets/{Bing,Flickr,Google,Instagram}
+
+while read label; do
+    python "bing.py" -o "Datasets/Bing" -k "${label/$'\r'/}"; echo
+    python "flickr.py" -o "Datasets/Flickr" -k "${label/$'\r'/}"; echo
+    python "instagram.py" -o "Datasets/Instagram" -k "${label/$'\r'/}"; echo
+done <"$input_file"
