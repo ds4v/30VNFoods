@@ -37,7 +37,7 @@ total_results = min(int(results['photos']['total']), args['max'])
 print('[INFO] Found', total_results, 'total results for', keyword)
 
 with open(urls_file, 'w') as f:
-    for page in range(total_results // group_size):
+    for page in range(max(1, total_results // group_size)):
         params['page'] = page + 1
         print('[GET] Request urls for page', page + 1)
         results = requests.get(ENDPOINT, params=params).json()
