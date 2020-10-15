@@ -12,16 +12,16 @@ args = vars(ap.parse_args())
 
 config = ConfigParser()
 config.read('secret.ini')
+keyword = args['keyword']
+group_size = args['per']
 
 ENDPOINT = 'https://api.cognitive.microsoft.com/bing/v7.0/images/search'
 API_KEY = config['BING']['API_KEY']
-keyword = args['keyword']
-group_size = args['per']
 
 urls_file = os.path.join(args['out'], f'{keyword}.txt')
 headers = {'Ocp-Apim-Subscription-Key': API_KEY}
 params = {
-    'q': keyword,
+    'q': keyword.replace(' ', ''),
     'offset': 0,
     'count': group_size,
     'imageType': 'photo',

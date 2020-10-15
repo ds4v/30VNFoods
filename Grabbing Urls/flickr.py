@@ -12,18 +12,18 @@ args = vars(ap.parse_args())
 
 config = ConfigParser()
 config.read('secret.ini')
-
-ENDPOINT = 'https://api.flickr.com/services/rest'
-METHOD = 'flickr.photos.getRecent'
-API_KEY = config['FLICKR']['API_KEY']
 keyword = args['keyword']
 group_size = args['per']
+
+ENDPOINT = 'https://www.flickr.com/services/rest/'
+METHOD = 'flickr.photos.search'
+API_KEY = config['FLICKR']['API_KEY']
 
 urls_file = os.path.join(args['out'], f'{keyword}.txt')
 params = {
     'method': METHOD,
     'api_key': API_KEY,
-    'tags': keyword,
+    'text': keyword.replace(' ', ''),
     'per_page': group_size,
     'page': 1,
     'format': 'json',
@@ -33,11 +33,11 @@ params = {
 print('[INFO] Searching Flickr API for', keyword)
 results = requests.get(ENDPOINT, params=params).json()
 
-total_results = min(results['photos']['total'], args['max'])
+total_results = min(int(results['photos']['total']), args['max'])
 print('[INFO] Found', total_results, 'total results for', keyword)
 
 with open(urls_file, 'w') as f:
-    for page in range(results['photos']['pages']):
+    for page in range(total_results // group_size):
         params['page'] = page + 1
         print('[GET] Request urls for page', page + 1)
         results = requests.get(ENDPOINT, params=params).json()
