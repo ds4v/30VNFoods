@@ -81,4 +81,4 @@ while idx0 < len(records):
     idx0 += insert_count + 1
 
 print(f'[UPDATE] Finish sorting and write to sheet')
-sheet.update(args['range'], records)
+sheet.update('B2:C', records)
