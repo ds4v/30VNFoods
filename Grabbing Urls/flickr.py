@@ -13,7 +13,7 @@ args = vars(ap.parse_args())
 config = ConfigParser()
 config.read('secret.ini')
 keyword = args['keyword']
-group_size = args['per']
+group_size = min(args['per'], 500)
 
 ENDPOINT = 'https://www.flickr.com/services/rest/'
 METHOD = 'flickr.photos.search'
