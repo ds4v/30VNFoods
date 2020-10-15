@@ -28,7 +28,7 @@ results = requests.get(ENDPOINT, headers=headers, params=params).json()
 results = results['graphql']['hashtag']['edge_hashtag_to_media']
 page_info = results['page_info']
 
-total_results = min(results['count'], args['max'])
+total_results = min(results['count'], int(args['max']))
 print('[INFO] Found', total_results, 'total results for', keyword)
 
 with open(urls_file, 'w') as f:

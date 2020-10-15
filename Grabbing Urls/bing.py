@@ -31,7 +31,7 @@ params = {
 print('[INFO] Searching Bing API for', keyword)
 results = requests.get(ENDPOINT, headers=headers, params=params).json()
 
-total_results = min(results['totalEstimatedMatches'], args['max'])
+total_results = min(results['totalEstimatedMatches'], int(args['max']))
 print('[INFO] Found', total_results, 'total results for', keyword)
 
 with open(urls_file, 'w') as f:

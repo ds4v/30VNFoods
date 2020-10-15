@@ -33,7 +33,7 @@ params = {
 print('[INFO] Searching Flickr API for', keyword)
 results = requests.get(ENDPOINT, params=params).json()
 
-total_results = min(int(results['photos']['total']), args['max'])
+total_results = min(int(results['photos']['total']), int(args['max']))
 print('[INFO] Found', total_results, 'total results for', keyword)
 
 with open(urls_file, 'w') as f:
