@@ -38,7 +38,7 @@ print(f"[INFO] Found {len(records)} urls in sheet {args['worksheet']}")
 while index < len(records):
     url, source = records[index]
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         print(f'[INFO] Caculate hashes of image {index + 1} from {url}')
 
         image = Image.open(BytesIO(response.content))
