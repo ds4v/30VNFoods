@@ -1,10 +1,7 @@
 function onOpen() {
 	const ui = SpreadsheetApp.getUi();
-	const menu = ui.createMenu('TOOLS BỔ TRỢ');
-
+	const menu = ui.createMenu('TOOLS GÁN NHÃN');
 	menu.addItem('Mở form gán nhãn', 'loadLabelingForm');
-	menu.addItem('Sắp xếp sheets theo tên', 'sortSheets');
-	menu.addItem('Xóa url trùng ở sheet hiện tại', 'removeDuplicates');
 	menu.addToUi();
 }
 
@@ -76,11 +73,11 @@ function getLastRowByCol(sheet, col) {
 
 function getCurrentInfo() {
 	const [activeSheet, activeRow, activeCol] = getActiveAddress();
-	if (activeRow - 1 === 0 || activeCol > 3) activeRow = 2;
+	if (activeRow - 1 === 0 || activeCol > 4) activeRow = 2;
 	return [
 		`Image ${activeRow - 1}.jpg`,
 		activeSheet.getName(),
-		...activeSheet.getRange(activeRow, 2, 1, 2).getValues()[0],
+		...activeSheet.getRange(activeRow, 2, 1, 3).getValues()[0],
 	];
 }
 
@@ -97,10 +94,10 @@ function moveImage(dest) {
 		return;
 
 	const destLastRow = getLastRowByCol(destSheet, 2) + 1;
-	const destRange = destSheet.getRange(destLastRow, 2, 1, 2);
-	const srcRange = activeSheet.getRange(activeRow, 2, 1, 2);
+	const destRange = destSheet.getRange(destLastRow, 2, 1, 3);
+	const srcRange = activeSheet.getRange(activeRow, 2, 1, 3);
 
-	srcRange.moveTo(destRange);
+	srcRange.copyTo(destRange);
 	activeSheet.deleteRow(activeRow);
 }
 

@@ -18,11 +18,11 @@ while i < len(urls):
     try:
         image_name = f'image {start_index}.jpg'
         print('[GET] Downloading', image_name, '-', urls[i])
-        req = requests.get(urls[i], timeout=60)
+        result = requests.get(urls[i], timeout=60)
 
         image_path = os.path.join(args['out'], image_name)
         with open(image_path, 'wb') as f:
-            f.write(req.content)
+            f.write(result.content)
             f.close()
 
         try:
