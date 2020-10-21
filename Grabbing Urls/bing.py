@@ -21,7 +21,7 @@ API_KEY = config['BING']['API_KEY']
 urls_file = os.path.join(args['out'], f'{keyword}.txt')
 headers = {'Ocp-Apim-Subscription-Key': API_KEY}
 params = {
-    'q': keyword.replace(' ', ''),
+    'q': keyword,
     'offset': 0,
     'count': group_size,
     'imageType': 'photo',

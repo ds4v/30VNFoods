@@ -3,7 +3,6 @@ Bánh bột lọc
 Bánh căn
 Bánh canh
 Bánh chưng
-Bánh chuối nướng
 Bánh cuốn
 Bánh đúc
 Bánh giò
@@ -21,6 +20,7 @@ Bún thịt nướng
 Cá kho tộ
 Canh chua
 Cao lầu
+Cháo lòng
 Cơm tấm
 Gỏi cuốn
 Hủ tiếu

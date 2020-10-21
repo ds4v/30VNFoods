@@ -2,6 +2,7 @@ function onOpen() {
 	const ui = SpreadsheetApp.getUi();
 	const menu = ui.createMenu('TOOLS GÁN NHÃN');
 	menu.addItem('Mở form gán nhãn', 'loadLabelingForm');
+	menu.addItem('Sắp xếp sheets theo tên', 'sortSheets');
 	menu.addToUi();
 }
 
