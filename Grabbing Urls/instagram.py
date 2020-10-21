@@ -32,7 +32,7 @@ total_results = min(results['count'], int(args['max']))
 print('[INFO] Found', total_results, 'total results for', keyword)
 
 with open(urls_file, 'w') as f:
-    while page_info['has_next_page'] and total_results > 0:
+    while total_results > 0:
         print('[GET] Request urls for cursor', page_info['end_cursor'])
         results = requests.get(ENDPOINT, headers=headers, params=params).json()
         results = results['graphql']['hashtag']['edge_hashtag_to_media']
