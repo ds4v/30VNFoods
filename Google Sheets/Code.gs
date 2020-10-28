@@ -2,7 +2,9 @@ function onOpen() {
 	const ui = SpreadsheetApp.getUi();
 	const menu = ui.createMenu('TOOLS GÁN NHÃN');
 	menu.addItem('Mở form gán nhãn', 'loadLabelingForm');
-	menu.addItem('Sắp xếp sheets theo tên', 'sortSheets');
+    menu.addItem('Sắp xếp sheets theo tên', 'sortSheets');
+    menu.addItem('Xóa url trùng trong sheet', 'removeDuplicates');
+    menu.addItem('Đặt kích thước cho ô chứa ảnh', 'setImageCellsSize');
 	menu.addToUi();
 }
 
@@ -36,7 +38,7 @@ function removeDuplicates() {
 	const newData = [];
 
 	for (let i in currentData) {
-		let row = currentData[i].slice(1, 3);
+		let row = currentData[i].slice(1, 2);
 		let duplicate = false;
 
 		for (let j in newData)
@@ -51,6 +53,23 @@ function removeDuplicates() {
 	activeSheet
 		.getRange(1, 2, newData.length, newData[0].length)
 		.setValues(newData);
+}
+
+function setImageCellsSize() {
+    const activeSheet = SpreadsheetApp.getActiveSheet();
+    const lastRow = getLastRowByCol(activeSheet, 2);
+  
+    const newSize = SpreadsheetApp.getUi().prompt(
+        'Đặt kích thước cho ô chứa ảnh', 
+        'Nhập kích thước theo định dạng (height,width) - Mặc định: 200,350', 
+        SpreadsheetApp.getUi().ButtonSet.OK
+    ).getResponseText().split(',');  
+  
+    const height = newSize[0] ? Number(newSize[0]) : 200;
+    const width = newSize[1] ? Number(newSize[1]) : 350;    
+  
+    activeSheet.setRowHeights(2, lastRow - 1, height);
+    activeSheet.setColumnWidth(1, width);
 }
 
 function getSheetNames() {
@@ -82,7 +101,7 @@ function getCurrentInfo() {
 	];
 }
 
-function moveImage(dest) {
+function moveImage(dest='Khác') {
 	const spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
 	const destSheet = spreadSheet.getSheetByName(dest);
 
