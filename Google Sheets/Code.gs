@@ -1,15 +1,22 @@
 function onOpen() {
 	const ui = SpreadsheetApp.getUi();
-	const menu = ui.createMenu('TOOLS GÁN NHÃN');
-	menu.addItem('Mở form gán nhãn', 'loadLabelingForm');
-    menu.addItem('Sắp xếp sheets theo tên', 'sortSheets');
-    menu.addItem('Xóa url trùng trong sheet', 'removeDuplicates');
-    menu.addItem('Đặt kích thước cho ô chứa ảnh', 'setImageCellsSize');
+	const menu = ui.createMenu('TOOLS BỔ TRỢ');
+
+	menu.addItem('Mở tool gán nhãn', 'loadLabelingForm');
+	menu.addSeparator();
+
+	menu.addItem('Sắp xếp sheets theo tên', 'sortSheets');
+	menu.addItem('Xóa urls trùng trong sheets', 'removeDuplicates');
+	menu.addItem('Download urls trong sheets', 'downloadUrls');
+	menu.addSeparator();
+
+	menu.addItem('Đặt kích thước cho ô chứa ảnh', 'setImageCellsSize');
+	menu.addItem('Move ảnh đang chọn qua nhãn Khác', 'moveImage');
 	menu.addToUi();
 }
 
 function loadLabelingForm() {
-	const service = HtmlService.createTemplateFromFile('index');
+	const service = HtmlService.createTemplateFromFile('LabelingForm');
 	const html = service.evaluate().setTitle('TOOL GÁN NHÃN');
 	const ui = SpreadsheetApp.getUi();
 	ui.showSidebar(html);
@@ -33,81 +40,43 @@ function sortSheets() {
 }
 
 function removeDuplicates() {
-	const activeSheet = SpreadsheetApp.getActiveSheet();
-	const currentData = activeSheet.getDataRange().getValues();
-	const newData = [];
+	const response = myMsgBox('Xóa urls trùng');
+	//  Browser.msgBox(
+	//		'Xóa url trùng trong sheet',
+	//		`Số ảnh còn lại hiện tại: ${newData.length - 2} ảnh`,
+	//		Browser.Buttons.OK
+	//	);
+}
 
-	for (let i in currentData) {
-		let row = currentData[i].slice(1, 2);
-		let duplicate = false;
-
-		for (let j in newData)
-			if (row.join() == newData[j].join()) duplicate = true;
-		if (!duplicate) newData.push(row);
-	}
-
-	activeSheet
-		.getRange(1, 2, currentData.length, newData[0].length)
-		.clearContent();
-
-	activeSheet
-		.getRange(1, 2, newData.length, newData[0].length)
-		.setValues(newData);
+function downloadUrls() {
+	const response = myMsgBox('Download urls');
+	//  Browser.msgBox(
+	//		'Download thành công',
+	//		`Đã lưu ${dataRange.getNumRows()} urls vào Google Drive`,
+	//		Browser.Buttons.OK
+	//	);
 }
 
 function setImageCellsSize() {
-    const activeSheet = SpreadsheetApp.getActiveSheet();
-    const lastRow = getLastRowByCol(activeSheet, 2);
-  
-    const newSize = SpreadsheetApp.getUi().prompt(
-        'Đặt kích thước cho ô chứa ảnh', 
-        'Nhập kích thước theo định dạng (height,width) - Mặc định: 200,350', 
-        SpreadsheetApp.getUi().ButtonSet.OK
-    ).getResponseText().split(',');  
-  
-    const height = newSize[0] ? Number(newSize[0]) : 200;
-    const width = newSize[1] ? Number(newSize[1]) : 350;    
-  
-    activeSheet.setRowHeights(2, lastRow - 1, height);
-    activeSheet.setColumnWidth(1, width);
+	const response = myMsgBox('Đặt kích thước ô chứa ảnh');
+	//  const newSize = SpreadsheetApp.getUi()
+	//		.prompt(
+	//			'Chọn kích thước cho ô chứa ảnh',
+	//			'Nhập kích thước mới theo định dạng (height,width) - Mặc định: 200,350',
+	//			SpreadsheetApp.getUi().ButtonSet.OK
+	//		)
+	//		.getResponseText()
+	//		.split(',');
 }
 
-function getSheetNames() {
-	const spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
-	const sheetNames = spreadSheet.getSheets().map(sheet => sheet.getName());
-	return sheetNames;
-}
-
-function getActiveAddress() {
-	const activeSheet = SpreadsheetApp.getActiveSheet();
-	const activeCell = activeSheet.getActiveCell();
-	return [activeSheet, activeCell.getRow(), activeCell.getColumn()];
-}
-
-function getLastRowByCol(sheet, col) {
-	const lastRow = sheet.getLastRow();
-	const range = sheet.getRange(lastRow, col);
-	if (range.getValue() !== '') return lastRow;
-	return range.getNextDataCell(SpreadsheetApp.Direction.UP).getRow();
-}
-
-function getCurrentInfo() {
-	const [activeSheet, activeRow, activeCol] = getActiveAddress();
-	if (activeRow - 1 === 0 || activeCol > 4) activeRow = 2;
-	return [
-		`Image ${activeRow - 1}.jpg`,
-		activeSheet.getName(),
-		...activeSheet.getRange(activeRow, 2, 1, 3).getValues()[0],
-	];
-}
-
-function moveImage(dest='Khác') {
+function moveImage(dest = 'Khác') {
 	const spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
 	const destSheet = spreadSheet.getSheetByName(dest);
 
 	const [activeSheet, activeRow, activeCol] = getActiveAddress();
 	if (
-		activeSheet.getSheetName() === destSheet.getSheetName() ||
+		activeSheet.getName() === destSheet.getName() ||
+		activeSheet.getName() === 'Thống kê' ||
 		activeRow - 1 === 0 ||
 		activeCol > 3
 	)
@@ -118,10 +87,5 @@ function moveImage(dest='Khác') {
 	const srcRange = activeSheet.getRange(activeRow, 2, 1, 3);
 
 	srcRange.copyTo(destRange);
-	activeSheet.deleteRow(activeRow);
-}
-
-function deleteImage() {
-	const [activeSheet, activeRow, activeCol] = getActiveAddress();
 	activeSheet.deleteRow(activeRow);
 }
