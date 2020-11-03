@@ -46,3 +46,13 @@ function deleteImage() {
 	if (activeSheet.getName() === 'Thống kê') return;
 	activeSheet.deleteRow(activeRow);
 }
+
+function runOnActiveSheet(func, param) {
+	const activeSheet = SpreadsheetApp.getActiveSheet();
+	return func(activeSheet, param);
+}
+
+function runOnAllSheets(func, param) {
+	const spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
+	spreadSheet.getSheets().forEach(sheet => func(sheet, param));
+}

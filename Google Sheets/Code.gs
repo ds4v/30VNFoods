@@ -40,33 +40,56 @@ function sortSheets() {
 }
 
 function removeDuplicates() {
-	const response = myMsgBox('Xóa urls trùng');
-	//  Browser.msgBox(
-	//		'Xóa url trùng trong sheet',
-	//		`Số ảnh còn lại hiện tại: ${newData.length - 2} ảnh`,
-	//		Browser.Buttons.OK
-	//	);
+	const response = myMsgBox('Xóa urls trùng trong sheet');
+	if (response === 'yes') {
+		runOnAllSheets(removeDuplicatesInSheet);
+		Browser.msgBox(
+			'Xóa urls trùng trong sheet',
+			'Đã xóa urls trùng của tất cả sheets',
+			Browser.Buttons.OK
+		);
+	} else if (response === 'no') {
+		const result = runOnActiveSheet(removeDuplicatesInSheet);
+		Browser.msgBox(
+			'Xóa urls trùng trong sheet',
+			`Số ảnh còn lại hiện tại: ${result} ảnh`,
+			Browser.Buttons.OK
+		);
+	}
 }
 
 function downloadUrls() {
 	const response = myMsgBox('Download urls');
-	//  Browser.msgBox(
-	//		'Download thành công',
-	//		`Đã lưu ${dataRange.getNumRows()} urls vào Google Drive`,
-	//		Browser.Buttons.OK
-	//	);
+	if (response === 'yes') {
+		runOnAllSheets(downloadUrlsInSheet);
+		Browser.msgBox(
+			'Download thành công',
+			'Đã lưu urls của tất cả sheets vào Google Drive',
+			Browser.Buttons.OK
+		);
+	} else if (response === 'no') {
+		const result = runOnActiveSheet(downloadUrlsInSheet);
+		Browser.msgBox(
+			'Download thành công',
+			`Đã lưu ${result} urls vào Google Drive`,
+			Browser.Buttons.OK
+		);
+	}
 }
 
 function setImageCellsSize() {
 	const response = myMsgBox('Đặt kích thước ô chứa ảnh');
-	//  const newSize = SpreadsheetApp.getUi()
-	//		.prompt(
-	//			'Chọn kích thước cho ô chứa ảnh',
-	//			'Nhập kích thước mới theo định dạng (height,width) - Mặc định: 200,350',
-	//			SpreadsheetApp.getUi().ButtonSet.OK
-	//		)
-	//		.getResponseText()
-	//		.split(',');
+	const newSize = SpreadsheetApp.getUi()
+		.prompt(
+			'Chọn kích thước cho ô chứa ảnh',
+			'Nhập kích thước mới theo định dạng (height,width) - Mặc định: 200,350',
+			SpreadsheetApp.getUi().ButtonSet.OK
+		)
+		.getResponseText()
+		.split(',');
+
+	if (response === 'yes') runOnAllSheets(setImageCellsSizeInSheet, newSize);
+	else if (response === 'no') runOnActiveSheet(activeSheet, newSize);
 }
 
 function moveImage(dest = 'Khác') {

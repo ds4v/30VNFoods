@@ -1,5 +1,7 @@
 function removeDuplicatesInSheet(currentSheet) {
 	if (currentSheet.getName() === 'Thống kê') return;
+	currentSheet.activate();
+
 	const currentData = currentSheet.getDataRange().getValues();
 	const newData = [];
 
@@ -18,10 +20,14 @@ function removeDuplicatesInSheet(currentSheet) {
 	currentSheet
 		.getRange(1, 2, newData.length, newData[0].length)
 		.setValues(newData);
+
+	return newData.length - 2;
 }
 
 function downloadUrlsInSheet(currentSheet) {
 	if (currentSheet.getName() === 'Thống kê') return;
+	currentSheet.activate();
+
 	const lastRow = getLastRowByCol(currentSheet, 2);
 	const fileName = `${currentSheet.getName()}.txt`;
 
@@ -33,12 +39,14 @@ function downloadUrlsInSheet(currentSheet) {
 
 	if (file.hasNext()) file.next().setContent(fileContent);
 	else folder.createFile(fileName, fileContent);
+	return dataRange.getNumRows();
 }
 
 function setImageCellsSizeInSheet(currentSheet, newSize) {
 	if (currentSheet.getName() === 'Thống kê') return;
-	const lastRow = getLastRowByCol(currentSheet, 2);
+	currentSheet.activate();
 
+	const lastRow = getLastRowByCol(currentSheet, 2);
 	const height = newSize[0] ? Number(newSize[0]) : 200;
 	const width = newSize[1] ? Number(newSize[1]) : 350;
 
