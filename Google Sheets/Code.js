@@ -78,7 +78,6 @@ function downloadUrls() {
 }
 
 function setImageCellsSize() {
-	const response = myMsgBox('Đặt kích thước ô chứa ảnh');
 	const newSize = SpreadsheetApp.getUi()
 		.prompt(
 			'Chọn kích thước cho ô chứa ảnh',
@@ -88,6 +87,7 @@ function setImageCellsSize() {
 		.getResponseText()
 		.split(',');
 
+	const response = myMsgBox('Đặt kích thước ô chứa ảnh');
 	if (response === 'yes') runOnAllSheets(setImageCellsSizeInSheet, newSize);
 	else if (response === 'no') runOnActiveSheet(activeSheet, newSize);
 }

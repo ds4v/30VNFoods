@@ -39,7 +39,8 @@
                 <div class="select is-fullwidth">
                     <select id="image-labels">
                         <? const sheetNames = getSheetNames();
-                               for (let i = 0; i < sheetNames.length; i++) { ?>
+                            for (let i = 0; i < sheetNames.length; i++) { 
+                                if (sheetNames[i] === 'Thống kê') continue; ?>
                         <option><?= sheetNames[i] ?></option>
                         <? } ?>
                     </select>
