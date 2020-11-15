@@ -46,10 +46,9 @@ function setImageCellsSizeInSheet(currentSheet, newSize) {
 	if (currentSheet.getName() === 'Thống kê') return;
 	currentSheet.activate();
 
-	const lastRow = getLastRowByCol(currentSheet, 2);
 	const height = newSize[0] ? Number(newSize[0]) : 200;
 	const width = newSize[1] ? Number(newSize[1]) : 350;
 
-	currentSheet.setRowHeights(2, lastRow - 1, height);
+	currentSheet.setRowHeights(2, currentSheet.getLastRow() - 1, height);
 	currentSheet.setColumnWidth(1, width);
 }

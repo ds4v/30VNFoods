@@ -1,0 +1,4 @@
+#!/bin/bash
+while read -r label; do
+    mkdir "Dataset/${label/$'\r'/}"
+done <labels.txt

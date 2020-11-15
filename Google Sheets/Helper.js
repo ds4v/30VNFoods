@@ -35,7 +35,6 @@ function getCurrentInfo() {
 	if (activeSheet.getName() === 'Thống kê') return;
 	else if (activeRow - 1 === 0 || activeCol > 4) activeRow = 2;
 	return [
-		`Image ${activeRow - 1}.jpg`,
 		activeSheet.getName(),
 		...activeSheet.getRange(activeRow, 2, 1, 3).getValues()[0],
 	];

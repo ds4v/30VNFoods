@@ -29,18 +29,13 @@
                 <p id="image-source"></p>
             </div>
 
-            <div class="field is-grouped">
-                <label class="control label">Trạng thái:</label>
-                <p id="image-status"></p>
-            </div>
-
             <div class="field">
                 <label class="label">Nhãn hiện tại:</label>
                 <div class="select is-fullwidth">
                     <select id="image-labels">
                         <? const sheetNames = getSheetNames();
-                            for (let i = 0; i < sheetNames.length; i++) { 
-                                if (sheetNames[i] === 'Thống kê') continue; ?>
+                               for (let i = 0; i < sheetNames.length; i++) { 
+                                   if (sheetNames[i] === 'Thống kê') continue; ?>
                         <option><?= sheetNames[i] ?></option>
                         <? } ?>
                     </select>
@@ -69,11 +64,7 @@
         btnDelete.addEventListener('click', () => google.script.run.deleteImage())
 
         window.setInterval(() => google.script.run.withSuccessHandler(value => {
-            const [name, label, url, source, status] = value
-
-            if (imageStatus.innerText !== status)
-                imageStatus.innerText = status ? 'Đã xong' : 'Chưa check'
-
+            const [label, url, source, name] = value
             if (imageUrl.href !== url) {
                 imageUrl.href = imageContent.src = url;
                 imageName.innerText = name
