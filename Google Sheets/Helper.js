@@ -5,8 +5,8 @@ function extractName(url) {
 function myMsgBox(title) {
 	return Browser.msgBox(
 		title,
-		`1. Trong tất cả các sheet (Yes)\\n
-         2. Trong sheet này (No)`,
+		`1. Cho tất cả các sheet (Yes)\\n
+         2. Cho sheet này (No)`,
 		Browser.Buttons.YES_NO
 	);
 }
@@ -46,12 +46,12 @@ function deleteImage() {
 	activeSheet.deleteRow(activeRow);
 }
 
-function runOnActiveSheet(func, param) {
+function runOnActiveSheet(func, params) {
 	const activeSheet = SpreadsheetApp.getActiveSheet();
-	return func(activeSheet, param);
+	return func(activeSheet, ...params);
 }
 
-function runOnAllSheets(func, param) {
+function runOnAllSheets(func, params) {
 	const spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
-	spreadSheet.getSheets().forEach(sheet => func(sheet, param));
+	spreadSheet.getSheets().forEach(sheet => func(sheet, ...params));
 }
