@@ -1,4 +1,5 @@
 *.jpg
+*.zip
 test.py
 secret.ini
 Dataset
