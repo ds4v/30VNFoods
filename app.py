@@ -99,7 +99,7 @@ elif url:
     )
 
 img_test = preprocess_image('./test.jpg')
-model = load_model('Model Implement/ResNet152V2/fine_tune_model_best.hdf5')
+model = load_model('[PLACE_YOUR_MODEL_PATH_HERE]')
 pred_probs = model.predict(img_test)[0]
 print(pred_probs)
 
